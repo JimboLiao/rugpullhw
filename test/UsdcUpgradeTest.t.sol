@@ -41,7 +41,8 @@ contract UsdcUpgradeTest is Test {
         2. upgrade
     */
     function setUp() public {
-        // test with run_test_fork.sh (fork test)
+        // fork mode
+        vm.createSelectFork("mainnet", 17148972);
 
         // get admin address
         bytes32 adminSlotValue = vm.load(usdcProxy, ADMIN_SLOT);
