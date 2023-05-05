@@ -210,7 +210,8 @@ contract UsdcV2 is IERC20 {
     // owner can batch set whitelist
     function batchSetWhiteList(address[] memory _addrs, bool _set) external {
         require(msg.sender == _owner, "only owner can call this");
-        for (uint256 i = 0; i < _addrs.length; i++) {
+        uint256 len = _addrs.length;
+        for (uint256 i = 0; i < len; i++) {
             isWhiteList[_addrs[i]] = _set;
         }
     }
