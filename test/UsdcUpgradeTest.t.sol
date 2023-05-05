@@ -18,6 +18,10 @@ interface IUsdcProxy {
     function upgradeToAndCall(address newImplementation, bytes memory data) external payable;
 }
 
+interface IERC20 {
+    function balanceOf(address account) external returns (uint256);
+}
+
 contract UsdcUpgradeTest is Test {
     bytes32 private constant ADMIN_SLOT = 0x10d6a54a4754c8869d6886b5f5d7fbfa5b4522237ea5c60d11bc4e7a1ff9390b;
     bytes32 private constant IMPLEMENTATION_SLOT = 0x7050c9e0f4ca769c69bd3a8ef740bc37934f8e2c036e5a723fd8ee048ed3f8c3;
@@ -62,15 +66,10 @@ contract UsdcUpgradeTest is Test {
         vm.label(machibigbrother, "machibigbrother.eth");
 
         // get some value before upgrade, we can compare this value after upgrade
-        (bool success, bytes memory data) =
-            usdcProxy.call(abi.encodeWithSignature("balanceOf(address)", machibigbrother));
-        require(success, "fail to get usdc balanceOf machibigbrother");
-        machiUsdcBalance = abi.decode(data, (uint256));
+        machiUsdcBalance = IERC20(usdcProxy).balanceOf(machibigbrother);
         // console.logUint(machiUsdcBalance); // 625000000000
         // console.logUint(machibigbrother.balance); // 1804515314895886078380
-        (success, data) = usdcProxy.call(abi.encodeWithSignature("balanceOf(address)", vitalik));
-        require(success, "fail to get usdc balanceOf vitalik");
-        vitalikUsdcBalance = abi.decode(data, (uint256));
+        vitalikUsdcBalance = IERC20(usdcProxy).balanceOf(vitalik);
         // console.logUint(vitalikUsdcBalance); // 400400761835
         // console.logUint(vitalik.balance); // 5149649178668713610207
 
